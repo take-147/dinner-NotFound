@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レシピモード</title>
+
+    <style>
+        /* ========================================
+           CSS：画面全体のデザイン
+        ======================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                "Segoe UI", Roboto, sans-serif;
+            background-color: #fffdf5;
+            color: #1f2937;
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ▼ ヘッダー＆ハンバーガーメニュー（レシピモード配色） ▼ */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0 16px;
+            position: relative;
+        }
+
+        .top-bar h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .header-spacer {
+            width: 44px;
+            flex-shrink: 0;
+        }
+
+        .hamburger-wrapper {
+            position: relative;
+            z-index: 200;
+            flex-shrink: 0;
+        }
+
+        .hamburger-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
+            background-color: #ffffff;
+            border: 2px solid #d69119;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #422b08;
+            box-shadow: 0 2px 6px rgba(66, 43, 8, 0.08);
+            transition: background-color 0.2s;
+        }
+
+        .hamburger-btn:hover {
+            background-color: #fff0c2;
+        }
+
+        /* ポップアップメニューの箱 */
+        .nav-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            padding-top: 8px;
+            min-width: 215px;
+            z-index: 201;
+        }
+
+        .hamburger-wrapper:hover .nav-popup,
+        .hamburger-wrapper.open .nav-popup {
+            display: block;
+        }
+
+        .nav-popup-box {
+            background-color: #ffffff;
+            border: 2px solid #d69119;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(66, 43, 8, 0.14);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-popup-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 16px;
+            text-decoration: none;
+            color: #422b08;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-bottom: 1px solid #fef3c7;
+            transition: background-color 0.15s;
+        }
+
+        .nav-popup-item:last-child {
+            border-bottom: none;
+        }
+
+        .nav-popup-item:hover {
+            background-color: #fff0c2;
+            color: #854900;
+        }
+        /* ▲ ハンバーガーメニューここまで ▲ */
+
+        /* 項目ごとの見出し */
+        h2 {
+            font-size: 1rem;
+            margin: 16px 0 8px;
+            padding: 6px 12px;
+            background-color: #fff0c2;
+            border-radius: 6px;
+        }
+
+        /* ========================================
+           食材入力欄
+        ======================================== */
+
+        form {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* 食材を入力するテキストボックス */
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* 食材の追加ボタン */
+        .add-btn {
+            background-color: #ffad20;
+            border: 1px solid #d69119;
+            color: #422b08;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 入力方法の説明文 */
+        .hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           入力済みの食材を表示するチップ
+        ======================================== */
+
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            border: 1px solid #d69119;
+            background-color: #ffad20;
+            color: #422b08;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chip:hover {
+            background-color: #e89a15;
+        }
+
+        /* ========================================
+           検索ボタン・リセットボタン
+        ======================================== */
+
+        .search-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 28px 0;
+        }
+
+        /* レシピ検索ボタン */
+        .search-btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #422b08;
+            background-color: #ffad20;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-btn:hover {
+            background-color: #e89a15;
+        }
+
+        /* データ読み込み中の検索ボタン */
+        .search-btn:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        /* 入力した食材をすべて消すボタン */
+        .reset-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 0.85rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* ========================================
+           モーダル（検索結果のポップアップ）
+        ======================================== */
+
+        /* ポップアップの後ろの暗い背景 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            z-index: 1000;
+        }
+
+        /* openクラスが付いたときだけ表示する */
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        /* ポップアップ本体 */
+        .modal-content {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 800px;
+            max-height: 88vh;
+            border-radius: 16px;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ポップアップ上部 */
+        .modal-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 10;
+        }
+
+        /* ポップアップを閉じるボタン */
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        /* ポップアップ内部 */
+        .modal-body {
+            padding: 16px 20px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        /* ========================================
+           検索結果のレシピカード
+        ======================================== */
+
+        .recipe-card {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            text-align: left;
+            font: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background-color: white;
+        }
+
+        /* カード左側の料理写真 */
+        .recipe-card-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        /* カード右側の料理情報 */
+        .recipe-card-info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        /* 料理名 */
+        .recipe-card-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        /* 料理の紹介文 */
+        .recipe-card-summary {
+            font-size: 0.8rem;
+            color: #4b5563;
+        }
+
+        /* 一致した食材の表示 */
+        .recipe-card-tags {
+            font-size: 0.8rem;
+            color: #a65c00;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        /* ========================================
+           レシピ詳細画面
+        ======================================== */
+
+        /* 詳細画面の料理写真 */
+        .detail-img {
+            width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* 材料・作り方の見出し */
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 24px 0 12px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #ffad20;
+        }
+
+        /* 検索結果に戻るボタン */
+        .back-btn {
+            background-color: #e5e7eb;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* エラーなどのお知らせ */
+        #status {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================
+         HTML：画面の構成
+    ======================================== -->
+
+    <!-- トップバー（ハンバーガーメニュー ＋ ページタイトル） -->
+    <header class="top-bar">
+        <div class="hamburger-wrapper" id="hamburger-wrapper">
+            <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="メニュー">☰</button>
+            <div class="nav-popup">
+                <div class="nav-popup-box">
+                    <a href="index.html" class="nav-popup-item">ホーム画面に戻る</a>
+                    <a href="test5.html" class="nav-popup-item">アキネーターモードへ</a>
+                </div>
+            </div>
+        </div>
+        <h1>🍳 レシピモード</h1>
+        <div class="header-spacer"></div>
+    </header>
+
+    <p>使いたい食材から今日の献立を探そう！</p>
+
+    <!-- 食材の入力欄 -->
+    <h2>使いたい食材</h2>
+
+    <form id="add-form">
+        <input
+            id="ingredient"
+            type="text"
+            aria-label="使いたい食材"
+            placeholder="例：豚肉、卵、きゃべつ"
+            autocomplete="off"
+        >
+
+        <button type="submit" class="add-btn">
+            追加
+        </button>
+    </form>
+
+    <!-- 入力方法の説明 -->
+    <p class="hint">
+        漢字・ひらがな・カタカナ・英語で検索できます。<br>
+        「、」やカンマで複数の食材を入力できます。<br>
+        追加した食材はクリックすると削除できます。
+    </p>
+
+    <!-- 入力済みの食材を表示する場所 -->
+    <div id="chips" class="chip-group"></div>
+
+    <!-- 検索ボタンとリセットボタン -->
+    <div class="search-btn-container">
+
+        <button id="search-btn" class="search-btn" disabled>
+            この食材で検索する
+        </button>
+
+        <button id="reset-btn" class="reset-btn">
+            選択をすべてリセット
+        </button>
+
+    </div>
+
+    <!-- データの読み込み状況やエラーを表示する場所 -->
+    <p id="status" role="status">
+        レシピデータを読み込み中...
+    </p>
+
+    <!-- ========================================
+         検索結果のポップアップ
+    ======================================== -->
+
+    <div id="modal" class="modal-overlay"
+        role="dialog" aria-modal="true"
+        aria-labelledby="modal-title">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3 id="modal-title">検索結果</h3>
+
+                <button id="close-modal" class="close-btn"
+                    aria-label="閉じる">
+                    ×
+                </button>
+
+            </div>
+
+            <!-- 検索結果や料理の詳細を表示する場所 -->
+            <div id="modal-body" class="modal-body"></div>
+
+        </div>
+    </div>
+
+    <script>
+
+        // ========================================
+        // 0. ハンバーガーメニュー開閉（タップ対応）
+        // ========================================
+
+        const hamburgerWrapper = document.getElementById('hamburger-wrapper');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+
+        hamburgerBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            hamburgerWrapper.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!hamburgerWrapper.contains(e.target)) {
+                hamburgerWrapper.classList.remove('open');
+            }
+        });
+
+
+        // ========================================
+        // 1. 変数・配列の宣言
+        // ========================================
+
+        // JSONから読み込んだ全料理データ
+        let recipes = [];
+
+        // ユーザーが入力した食材を保存する配列
+        let selected = [];
+
+        // 検索条件に一致した料理を保存する配列
+        let found = [];
+
+        // HTMLのidから要素を取得する関数
+        const $ = id => document.getElementById(id);
+
+
+        // ========================================
+        // 2. 食材の別名を登録する辞書
+        // ========================================
+
+        const foodDictionary = [
+
+            // ---------- 肉類 ----------
+
+            ['豚肉',
+                'ぶたにく',
+                'pork',
+                '豚こま肉',
+                '豚こま',
+                'ぶたこまにく',
+                'ぶたこま',
+                '豚バラ肉',
+                '豚バラ',
+                'ぶたばらにく',
+                '薄切り豚肉',
+                'うすぎりぶたにく',
+                '豚ひき肉',
+                '豚挽肉',
+                '豚挽き肉',
+                'ぶたひきにく',
+                '豚ロース肉',
+                '豚ロース',
+                '豚ヒレ肉',
+                'pork pieces',
+                'pork belly',
+                'sliced pork',
+                'ground pork',
+                'minced pork'
+            ],
+
+            ['鶏肉',
+                'とりにく',
+                'けいにく',
+                '鳥肉',
+                'chicken',
+                '鶏もも肉',
+                '鶏モモ肉',
+                'とりももにく',
+                '鶏むね肉',
+                '鶏胸肉',
+                'とりむねにく',
+                '鶏ひき肉',
+                '鶏挽肉',
+                'とりひきにく',
+                'ささみ',
+                'ササミ',
+                '手羽先',
+                '手羽元',
+                'chicken thigh',
+                'chicken breast',
+                'ground chicken',
+                'minced chicken'
+            ],
+
+            ['牛肉',
+                'ぎゅうにく',
+                'beef',
+                '牛こま肉',
+                '牛こま',
+                '牛バラ肉',
+                '牛バラ',
+                '牛もも肉',
+                '牛ロース肉',
+                '牛ヒレ肉',
+                '牛ひき肉',
+                '牛挽肉',
+                '牛挽き肉',
+                'ぎゅうひきにく',
+                '薄切り牛肉',
+                'ground beef',
+                'minced beef',
+                'sliced beef',
+                'beef belly'
+            ],
+
+            ['合挽き肉',
+                '合い挽き肉',
+                '合いびき肉',
+                '合挽肉',
+                'あいびきにく',
+                '牛豚合挽き肉',
+                'mixed ground meat'
+            ],
+
+            ['ひき肉',
+                '挽肉',
+                '挽き肉',
+                'ひきにく',
+                'ground meat',
+                'minced meat'
+            ],
+
+            ['ハム', 'ham'],
+
+            ['ベーコン', 'bacon'],
+
+            ['ウインナー', 'ウィンナー',
+                'ソーセージ', 'sausage'],
+
+
+            // ---------- 魚介類 ----------
+
+            ['鮭', 'さけ', 'しゃけ', 'salmon'],
+
+            ['鯖', 'さば', 'mackerel'],
+
+            ['鰯', 'いわし', 'sardine'],
+
+            ['鯵', 'あじ', 'horse mackerel'],
+
+            ['鮪', 'まぐろ', 'tuna'],
+
+            ['海老', 'えび', 'エビ', 'shrimp', 'prawn'],
+
+            ['烏賊', 'いか', 'イカ', 'squid'],
+
+            ['蛸', 'たこ', 'タコ', 'octopus'],
+
+
+            // ---------- 卵・乳製品 ----------
+
+            ['卵', 'たまご', '玉子',
+                '溶き卵', 'ときたまご', 'egg', 'eggs'],
+
+            ['牛乳', 'ぎゅうにゅう', 'milk'],
+
+            ['チーズ', 'cheese'],
+
+            ['バター', 'butter'],
+
+            ['ヨーグルト', 'yogurt', 'yoghurt'],
+
+
+            // ---------- 野菜類 ----------
+
+            ['キャベツ', 'きゃべつ', 'cabbage'],
+
+            ['人参', 'にんじん', 'carrot', 'carrots'],
+
+            ['玉ねぎ', '玉葱', 'たまねぎ',
+                'onion', 'onions'],
+
+            ['じゃがいも', 'ジャガ芋',
+                '馬鈴薯', 'potato', 'potatoes'],
+
+            ['大根', 'だいこん', '大根おろし',
+                'だいこんおろし', 'daikon', 'radish'],
+
+            ['ねぎ', 'ネギ', '葱',
+                '長ねぎ', '長ネギ', '長葱', 'ながねぎ',
+                'green onion', 'scallion', 'spring onion'],
+
+            ['もやし', 'モヤシ', '豆もやし',
+                'bean sprout', 'bean sprouts'],
+
+            ['ピーマン', 'ぴーまん',
+                'green pepper', 'bell pepper'],
+
+            ['ニラ', 'にら', '韮',
+                'garlic chives', 'chives'],
+
+            ['白菜', 'はくさい', 'chinese cabbage'],
+
+            ['ほうれん草', 'ほうれんそう', 'spinach'],
+
+            ['小松菜', 'こまつな', 'komatsuna'],
+
+            ['トマト', 'tomato', 'tomatoes'],
+
+            ['きゅうり', '胡瓜', 'cucumber'],
+
+            ['なす', '茄子', 'eggplant', 'aubergine'],
+
+            ['かぼちゃ', '南瓜', 'pumpkin'],
+
+            ['レタス', 'lettuce'],
+
+            ['ブロッコリー', 'broccoli'],
+
+            ['椎茸', 'しいたけ', 'shiitake'],
+
+            ['生姜', 'しょうが', 'ショウガ',
+                'しょうがチューブ', 'すりおろし生姜',
+                'ginger'],
+
+            ['にんにく', '大蒜', 'ニンニク',
+                'にんにくチューブ',
+                'にんにくのすりおろし',
+                'すりおろしニンニク', 'garlic'],
+
+
+            // ---------- 主食・粉類 ----------
+
+            ['ご飯', 'ごはん', '御飯', 'ライス',
+                'rice', 'cooked rice'],
+
+            ['米', 'こめ', 'uncooked rice'],
+
+            ['パン', 'bread'],
+
+            ['パン粉', 'ぱんこ', 'breadcrumbs'],
+
+            ['小麦粉', 'こむぎこ', 'wheat flour', 'flour'],
+
+            ['薄力粉', 'はくりきこ', 'cake flour'],
+
+            ['片栗粉', 'かたくりこ', 'potato starch'],
+
+            ['うどん', 'udon'],
+
+            ['そば', '蕎麦', 'soba'],
+
+            ['パスタ', 'スパゲッティ', 'pasta', 'spaghetti'],
+
+            ['トッポギ', 'トック', 'tteokbokki', 'rice cake'],
+
+            ['餃子の皮', 'ぎょうざのかわ',
+                'dumpling wrapper', 'gyoza wrapper'],
+
+
+            // ---------- 調味料 ----------
+
+            ['塩', 'しお', 'salt'],
+
+            ['砂糖', 'さとう', 'sugar'],
+
+            ['醤油', 'しょうゆ', 'しょう油', 'soy sauce'],
+
+            ['味噌', 'みそ', 'miso'],
+
+            ['酢', 'す', 'vinegar'],
+
+            ['みりん', '味醂', 'mirin'],
+
+            ['酒', 'さけ', '料理酒', 'りょうりしゅ',
+                'cooking sake', 'cooking wine'],
+
+            ['こしょう', '胡椒', 'コショウ', 'pepper'],
+
+            ['黒コショウ', '黒胡椒', 'くろこしょう',
+                'black pepper'],
+
+            ['塩コショウ', '塩こしょう', '塩胡椒',
+                'しおこしょう', 'salt and pepper'],
+
+            ['ごま油', '胡麻油', 'ごまあぶら', 'sesame oil'],
+
+            ['サラダ油', 'さらだあぶら', 'vegetable oil'],
+
+            ['油', 'あぶら', 'oil'],
+
+            ['ケチャップ', 'ketchup'],
+
+            ['マヨネーズ', 'mayonnaise'],
+
+            ['コチュジャン', 'gochujang'],
+
+            ['オイスターソース', 'oyster sauce'],
+
+            ['中濃ソース', 'ちゅうのうそーす', 'chuno sauce'],
+
+            ['デミグラスソース', 'デミグラスソース缶',
+                'demiglace', 'demi-glace', 'demi glace sauce'],
+
+            ['鶏がらスープの素', '鶏ガラスープの素',
+                'とりがらすーぷのもと', 'chicken stock powder'],
+
+            ['赤ワイン', 'あかわいん', 'red wine'],
+
+            ['白ごま', '白胡麻', 'しろごま',
+                'white sesame seeds'],
+
+            ['糸唐辛子', 'いととうがらし', 'shredded chili'],
+
+            ['水', 'みず', 'water']
+
+        ];
+
+
+        // ========================================
+        // 3. 関連する食材を登録する
+        // ========================================
+
+        const foodCategories = {
+
+            '豚肉': [
+                '合挽き肉'
+            ],
+
+            '牛肉': [
+                '合挽き肉'
+            ],
+
+            'ひき肉': [
+                '合挽き肉'
+            ],
+
+            '小麦粉': [
+                '薄力粉'
+            ],
+
+            '油': [
+                'サラダ油',
+                'ごま油'
+            ],
+
+            'こしょう': [
+                '黒コショウ',
+                '塩コショウ'
+            ],
+
+            '塩': [
+                '塩コショウ'
+            ]
+
+        };
+
+
+        // ========================================
+        // 4. 入力された文字の表記を統一する
+        // ========================================
+
+        function normalize(text) {
+            let result = String(text);
+            result = result.normalize('NFKC');
+            result = result.toLowerCase();
+            result = result.trim();
+            result = result.replace(/[ぁ-ゖ]/g, function (c) {
+                return String.fromCharCode(
+                    c.charCodeAt(0) + 96
+                );
+            });
+            result = result.replace(/\s+/g, '');
+            return result;
+        }
+
+
+        // ========================================
+        // 5. 食材名を代表となる名前に変換する
+        // ========================================
+
+        function canonical(text) {
+            const normalizedText = normalize(text);
+
+            for (const group of foodDictionary) {
+                const isMatch = group.some(function (word) {
+                    return normalize(word) === normalizedText;
+                });
+
+                if (isMatch) {
+                    return normalize(group[0]);
+                }
+            }
+
+            return normalizedText;
+        }
+
+
+        // ========================================
+        // 6. 材料データから食材名だけを取り出す
+        // ========================================
+
+        function ingredientName(raw) {
+            const text = String(raw).trim();
+
+            if (!text || text.startsWith('[')) {
+                return '';
+            }
+
+            const parts = text.split(/\s+/);
+            return parts[0];
+        }
+
+
+        // ========================================
+        // 7. 入力した食材と料理の材料を比較する
+        // ========================================
+
+        function matches(recipe, term) {
+            const searchWord = canonical(term);
+
+            if (!searchWord) {
+                return false;
+            }
+
+            const searchWords = [searchWord];
+
+            for (const category in foodCategories) {
+                if (canonical(category) === searchWord) {
+                    for (const food of foodCategories[category]) {
+                        searchWords.push(canonical(food));
+                    }
+                }
+            }
+
+            const ingredients = recipe.ingredients || [];
+
+            return ingredients.some(function (raw) {
+                const name = ingredientName(raw);
+
+                if (!name) {
+                    return false;
+                }
+
+                const foodName = canonical(name);
+                return searchWords.includes(foodName);
+            });
+        }
+
+
+        // ========================================
+        // 8. 入力した食材を画面に表示する
+        // ========================================
+
+        function renderChips() {
+            const chips = $('chips');
+            chips.replaceChildren();
+
+            selected.forEach(function (food, index) {
+                const button = document.createElement('button');
+                button.className = 'chip';
+                button.type = 'button';
+                button.textContent = food + ' ×';
+
+                button.onclick = function () {
+                    selected.splice(index, 1);
+                    renderChips();
+                };
+
+                chips.appendChild(button);
+            });
+        }
+
+
+        // ========================================
+        // 9. 入力された食材を追加する
+        // ========================================
+
+        function addIngredients() {
+            const input = $('ingredient').value;
+
+            const values = input
+                .replaceAll('、', ',')
+                .replaceAll('，', ',')
+                .split(',');
+
+            for (const value of values) {
+                let food = value.trim();
+
+                if (!food) {
+                    continue;
+                }
+
+                const foodName = canonical(food);
+
+                if (foodName === canonical('豚肉')) {
+                    food = '豚肉';
+                } else if (foodName === canonical('鶏肉')) {
+                    food = '鶏肉';
+                } else if (foodName === canonical('牛肉')) {
+                    food = '牛肉';
+                }
+
+                const exists = selected.some(function (item) {
+                    return canonical(item) === canonical(food);
+                });
+
+                if (!exists) {
+                    selected.push(food);
+                }
+            }
+
+            $('ingredient').value = '';
+            renderChips();
+        }
+
+
+        // ========================================
+        // 10. 追加ボタンを押したときの処理
+        // ========================================
+
+        $('add-form').onsubmit = function (event) {
+            event.preventDefault();
+            addIngredients();
+        };
+
+
+        // ========================================
+        // 11. リセットボタンを押したときの処理
+        // ========================================
+
+        $('reset-btn').onclick = function () {
+            selected = [];
+            $('ingredient').value = '';
+            renderChips();
+
+            if (!$('search-btn').disabled) {
+                $('status').textContent = '';
+            }
+        };
+
+
+        // ========================================
+        // 12. レシピを検索する処理
+        // ========================================
+
+        $('search-btn').onclick = function () {
+            addIngredients();
+
+            if (selected.length === 0) {
+                $('status').textContent =
+                    '食材を1つ以上入力してください。';
+                return;
+            }
+
+            $('status').textContent = '';
+            found = [];
+
+            for (const recipe of recipes) {
+                const matched = [];
+
+                for (const food of selected) {
+                    if (matches(recipe, food)) {
+                        matched.push(food);
+                    }
+                }
+
+                if (matched.length > 0) {
+                    found.push({
+                        recipe: recipe,
+                        matched: matched
+                    });
+                }
+            }
+
+            found.sort(function (a, b) {
+                return b.matched.length - a.matched.length;
+            });
+
+            showResults();
+            $('modal').classList.add('open');
+        };
+
+
+        // ========================================
+        // 13. HTML要素を作成する共通関数
+        // ========================================
+
+        function createElement(tag, text, className) {
+            const element = document.createElement(tag);
+            element.textContent = text || '';
+
+            if (className) {
+                element.className = className;
+            }
+
+            return element;
+        }
+
+
+        // ========================================
+        // 14. 料理写真を作成する共通関数
+        // ========================================
+
+        function createPhoto(recipe, className) {
+            const img = document.createElement('img');
+            img.src = recipe.image;
+            img.alt = recipe.name;
+            img.className = className;
+
+            img.onerror = function () {
+                img.style.display = 'none';
+            };
+
+            return img;
+        }
+
+
+        // ========================================
+        // 15. 検索結果を画面に表示する
+        // ========================================
+
+        function showResults() {
+            $('modal-title').textContent =
+                '検索結果：' + found.length + '件';
+
+            const body = $('modal-body');
+            body.replaceChildren();
+
+            if (found.length === 0) {
+                body.appendChild(
+                    createElement(
+                        'p',
+                        '一致する料理がありませんでした。'
+                    )
+                );
+                return;
+            }
+
+            for (const item of found) {
+                const recipe = item.recipe;
+
+                const card = createElement(
+                    'button',
+                    '',
+                    'recipe-card'
+                );
+
+                if (recipe.image) {
+                    card.appendChild(
+                        createPhoto(recipe, 'recipe-card-img')
+                    );
+                }
+
+                const info = createElement(
+                    'div',
+                    '',
+                    'recipe-card-info'
+                );
+
+                const title = createElement(
+                    'div',
+                    recipe.name,
+                    'recipe-card-title'
+                );
+
+                const summary = createElement(
+                    'div',
+                    recipe.summary,
+                    'recipe-card-summary'
+                );
+
+                const tags = createElement(
+                    'div',
+                    item.matched.length +
+                    'つ一致：' +
+                    item.matched.join('・'),
+                    'recipe-card-tags'
+                );
+
+                info.append(title, summary, tags);
+                card.appendChild(info);
+
+                card.onclick = function () {
+                    showDetail(recipe);
+                };
+
+                body.appendChild(card);
+            }
+
+            document.querySelector('.modal-content').scrollTop = 0;
+        }
+
+
+        // ========================================
+        // 16. 料理の詳細画面を表示する
+        // ========================================
+
+        function showDetail(recipe) {
+            $('modal-title').textContent = recipe.name;
+
+            const body = $('modal-body');
+            body.replaceChildren();
+
+            const back = createElement(
+                'button',
+                '← 検索結果に戻る',
+                'back-btn'
+            );
+
+            back.onclick = showResults;
+            body.appendChild(back);
+
+            if (recipe.image) {
+                body.appendChild(
+                    createPhoto(recipe, 'detail-img')
+                );
+            }
+
+            body.appendChild(
+                createElement('p', recipe.summary)
+            );
+
+
+            // ---------- 材料の表示 ----------
+
+            body.appendChild(
+                createElement('h3', '材料', 'section-title')
+            );
+
+            const ingredientsList = document.createElement('ul');
+
+            if (recipe.ingredients && recipe.ingredients.length > 0) {
+                for (const ingredient of recipe.ingredients) {
+                    if (ingredient.trim()) {
+                        ingredientsList.appendChild(
+                            createElement('li', ingredient)
+                        );
+                    }
+                }
+                body.appendChild(ingredientsList);
+            } else {
+                body.appendChild(
+                    createElement('p', '材料データがありません。')
+                );
+            }
+
+
+            // ---------- 作り方の表示 ----------
+
+            body.appendChild(
+                createElement('h3', '作り方', 'section-title')
+            );
+
+            const stepsList = document.createElement('ol');
+
+            if (recipe.steps && recipe.steps.length > 0) {
+                for (const step of recipe.steps) {
+                    const trimmed = String(step).trim();
+                    if (!trimmed) continue;
+
+                    if (/^https?:\/\//.test(trimmed)) {
+                        const li = document.createElement('li');
+                        li.style.listStyle = 'none';
+                        const link = document.createElement('a');
+                        link.href = trimmed;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.textContent = '引用元レシピはこちら';
+                        li.appendChild(link);
+                        stepsList.appendChild(li);
+                    } else {
+                        stepsList.appendChild(
+                            createElement('li', step)
+                        );
+                    }
+                }
+                body.appendChild(stepsList);
+            } else {
+                body.appendChild(
+                    createElement('p', '作り方データがありません。')
+                );
+            }
+
+            document.querySelector('.modal-content').scrollTop = 0;
+        }
+
+
+        // ========================================
+        // 17. モーダルを閉じる処理とJSON読み込み
+        // ========================================
+
+        $('close-modal').onclick = function () {
+            $('modal').classList.remove('open');
+        };
+
+        $('modal').onclick = function (event) {
+            if (event.target === $('modal')) {
+                $('modal').classList.remove('open');
+            }
+        };
+
+        fetch('recipes.json')
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                recipes = data;
+                $('search-btn').disabled = false;
+                $('status').textContent = '';
+            })
+            .catch(function (error) {
+                console.error('JSON読み込みエラー:', error);
+                $('status').textContent =
+                    'レシピデータの読み込みに失敗しました。';
+            });
+
+    </script>
+</body>
+</html>
