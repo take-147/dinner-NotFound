@@ -7,17 +7,17 @@
     <style>
     * { box-sizing: border-box; }
 
-    /* 全体設定 */
+    /* 全体設定（レシピモードと統一した温かみのある配色） */
     body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: #faf7f2;
+        background-color: #fffdf5;
         color: #1f2937;
         padding: 16px;
         max-width: 920px;
         margin: 0 auto;
     }
 
-    /* ▼ ヘッダー＆ハンバーガーメニュー＆設定ボタン ▼ */
+    /* ▼ ヘッダー＆ハンバーガーメニュー＆設定ボタン（レシピモード配色） ▼ */
     .top-bar {
         display: flex;
         align-items: center;
@@ -27,10 +27,11 @@
     }
 
     .top-bar h1 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         margin: 0;
         text-align: center;
         flex-grow: 1;
+        color: #1f2937;
     }
 
     .hamburger-wrapper {
@@ -44,23 +45,22 @@
         width: 44px;
         height: 44px;
         font-size: 1.4rem;
-        background-color: #faf7f2;
-        border: 2px solid #1f2937;
+        background-color: #ffffff;
+        border: 2px solid #d69119;
         border-radius: 10px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #1f2937;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        color: #422b08;
+        box-shadow: 0 2px 6px rgba(66, 43, 8, 0.08);
         transition: background-color 0.2s;
         flex-shrink: 0;
     }
 
     .hamburger-btn:hover,
     .setting-btn:hover {
-        background-color: #fff8eb;
-        border: 2px solid #d69119;
+        background-color: #fff0c2;
     }
 
     /* ポップアップメニューの箱 */
@@ -70,7 +70,7 @@
         top: 100%;
         left: 0;
         padding-top: 8px;
-        min-width: 210px;
+        min-width: 215px;
         z-index: 201;
     }
 
@@ -81,9 +81,9 @@
 
     .nav-popup-box {
         background-color: #ffffff;
-        border: 2px solid #1f2937;
+        border: 2px solid #d69119;
         border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 25px rgba(66, 43, 8, 0.14);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -95,10 +95,10 @@
         gap: 8px;
         padding: 13px 16px;
         text-decoration: none;
-        color: #1f2937;
+        color: #422b08;
         font-size: 0.95rem;
         font-weight: bold;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid #fef3c7;
         transition: background-color 0.15s;
     }
 
@@ -107,8 +107,8 @@
     }
 
     .nav-popup-item:hover {
-        background-color: #fef3c7;
-        color: #92400e;
+        background-color: #fff0c2;
+        color: #854900;
     }
     /* ▲ ヘッダーここまで ▲ */
 
@@ -130,11 +130,11 @@
         position: relative;
         width: 100%;
         height: 145px;
-        background: linear-gradient(180deg, rgba(255, 251, 235, 0.96) 0%, rgba(254, 243, 199, 0.96) 100%);
+        background: linear-gradient(180deg, rgba(255, 251, 235, 0.96) 0%, rgba(255, 240, 194, 0.96) 100%);
         backdrop-filter: blur(6px);
-        border: 2px solid #fde68a;
+        border: 2px solid #f3d08a;
         border-radius: 16px;
-        box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 6px 16px -4px rgba(66, 43, 8, 0.1);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -169,12 +169,13 @@
         text-align: center;
         font-size: 0.78rem;
         font-weight: bold;
-        color: #92400e;
+        color: #422b08;
         background: rgba(255, 255, 255, 0.92);
+        border: 1px solid #fde68a;
         padding: 4px 10px;
         border-radius: 9999px;
         z-index: 5;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        box-shadow: 0 1px 3px rgba(66, 43, 8, 0.06);
     }
 
     /* 鍋＋フタ（SVG） */
@@ -291,7 +292,8 @@
         font-size: 1rem;
         margin: 16px 0 8px;
         padding: 6px 12px;
-        background-color: #e5e7eb;
+        background-color: #fff0c2;
+        color: #1f2937;
         border-radius: 6px;
     }
     .controls-side h2:first-child { margin-top: 0; }
@@ -308,9 +310,9 @@
     .chip {
         display: inline-flex;
         align-items: center;
-        padding: 6px 16px;
+        padding: 7px 16px;
         border-radius: 9999px;
-        border: 1px solid #d1d5db;
+        border: 1px solid #e5d5b5;
         background-color: #ffffff;
         color: #4b5563;
         font-size: 0.875rem;
@@ -320,16 +322,17 @@
     }
 
     .chip:hover {
-        background-color: #f9fafb;
-        border-color: #9ca3af;
+        background-color: #fff8e6;
+        border-color: #d69119;
+        color: #422b08;
     }
 
-    /* 選択されたボタンの変色 */
+    /* 選択されたボタンの変色（レシピモードのチップと同色） */
     .chip.active {
         background-color: #ffad20;
         border-color: #d69119;
-        color: #ffffff;
-        font-weight: 600;
+        color: #422b08;
+        font-weight: bold;
     }
 
     .chip .icon { display: none; margin-right: 4px; }
@@ -346,18 +349,18 @@
     .search-btn {
         width: 100%;
         max-width: 320px;
-        padding: 12px 24px;
+        padding: 14px 24px;
         font-size: 1rem;
         font-weight: bold;
-        color: #ffffff;
-        background-color: #2563eb;
+        color: #422b08;
+        background-color: #ffad20;
         border: none;
         border-radius: 9999px;
         cursor: pointer;
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 4px 6px rgba(66, 43, 8, 0.12);
         transition: background-color 0.2s;
     }
-    .search-btn:hover { background-color: #1d4ed8; }
+    .search-btn:hover { background-color: #e89a15; }
 
     .reset-btn {
         background: none;
@@ -367,7 +370,7 @@
         text-decoration: underline;
         cursor: pointer;
     }
-    .reset-btn:hover { color: #374151; }
+    .reset-btn:hover { color: #422b08; }
 
     /* モーダル（ポップアップ） */
     .modal-overlay {
@@ -407,7 +410,7 @@
     }
 
     .close-btn {
-        background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #9ca3af; line-height: 1;
+        background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; line-height: 1;
     }
     .close-btn:hover { color: #111; }
 
@@ -419,7 +422,7 @@
 
     /* 長方形レシピカード */
     .section-title {
-        font-weight: bold; font-size: 1rem; margin: 24px 0 12px; color: #374151;
+        font-weight: bold; font-size: 1rem; margin: 24px 0 12px; color: #1f2937;
         padding-bottom: 4px; border-bottom: 2px solid #ffad20;
     }
     .section-title:first-child { margin-top: 0; }
@@ -458,7 +461,7 @@
     .recipe-card-info { flex-grow: 1; min-width: 0; }
     .recipe-card-title { font-weight: bold; font-size: 1.05rem; margin: 0 0 4px; color: #111; }
     .recipe-card-summary-mobile { font-size: 0.8rem; color: #4b5563; margin-bottom: 4px; }
-    .recipe-card-tags { font-size: 0.8rem; color: #2563eb; }
+    .recipe-card-tags { font-size: 0.8rem; color: #a65c00; font-weight: bold; }
     .recipe-card-match-rate { font-size: 0.8rem; font-weight: bold; color: #d97706; margin-top: 3px; }
 
     /* ▼ アレルギー注意バッジ（追加機能） ▼ */
@@ -493,13 +496,13 @@
         justify-content: space-between;
         align-items: center;
         padding: 14px 20px;
-        background: #fffbeb;
+        background: #fff0c2;
         border-bottom: 1px solid #fde68a;
     }
     .setting-card-header h3 {
         margin: 0;
         font-size: 1.05rem;
-        color: #92400e;
+        color: #422b08;
     }
     .setting-card-body {
         padding: 20px;
@@ -544,9 +547,9 @@
     .save-setting-btn {
         width: 100%;
         padding: 12px;
-        background: #2563eb;
-        color: #ffffff;
-        border: none;
+        background: #ffad20;
+        color: #422b08;
+        border: 1px solid #d69119;
         border-radius: 9999px;
         font-size: 0.95rem;
         font-weight: bold;
@@ -554,7 +557,7 @@
         transition: background-color 0.2s;
     }
     .save-setting-btn:hover {
-        background: #1d4ed8;
+        background: #e89a15;
     }
     /* ▲ アレルギー設定ポップアップここまで ▲ */
 
@@ -563,7 +566,7 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        background: #fffbeb;
+        background: #fffdf5;
         border: 1px solid #fde68a;
         border-radius: 12px;
         padding: 12px;
@@ -618,7 +621,7 @@
             transform: translateY(-50%);
             width: 240px;
             padding: 8px 12px;
-            background: rgba(31, 41, 55, 0.95);
+            background: rgba(66, 43, 8, 0.94);
             color: #ffffff;
             font-size: 0.8rem;
             border-radius: 8px;
@@ -664,7 +667,7 @@
                 <div class="nav-popup-box">
                     <a href="index.html" class="nav-popup-item">🏠 ホーム画面に戻る</a>
                     <a href="recipe.html" class="nav-popup-item">📖 レシピモードへ</a>
-                    <a href="knowledge.html" class="nav-popup-item"> 豆知識モードに行く</a>
+                    <a href="knowledge.html" class="nav-popup-item">💡 豆知識モードに行く</a>
                 </div>
             </div>
         </div>
@@ -1029,47 +1032,37 @@
             return;
         }
 
-        // 主役の材料で選択されていないタグ（例：「肉・野菜」を選んだ場合の「魚」「卵」）
         const allZairyouTags = ['meat', 'fish', 'egg', 'yasai'];
         const unselectedZairyou = allZairyouTags.filter(t => !selectedZairyou.includes(t));
 
         const scoredRecipes = recipes.map(r => {
             const rTags = r.tags || [];
 
-            // 1. 「主役の材料」が選択されている場合：
-            // ・選んだ材料が1つ以上含まれていること
-            // ・さらに「選んでいない主役材料（魚など）」が混ざっていないこと
-            //   （※ただし、選んだ材料自体（肉など）も両方入っている料理なら表示OK）
             let hasSelectedZairyou = true;
             let hasUnwantedZairyou = false;
 
             if (selectedZairyou.length > 0) {
                 hasSelectedZairyou = selectedZairyou.some(t => rTags.includes(t));
-                // 「肉と野菜」を選んだのに「野菜と魚」しか入っていない料理（=肉が入っていない魚料理）を弾く
                 const hasCoreSelected = selectedZairyou.some(t => ['meat', 'fish', 'egg'].includes(t))
                     ? selectedZairyou.filter(t => ['meat', 'fish', 'egg'].includes(t)).some(t => rTags.includes(t))
                     : hasSelectedZairyou;
                 hasUnwantedZairyou = !hasCoreSelected || unselectedZairyou.some(t => ['meat', 'fish'].includes(t) && rTags.includes(t) && !selectedZairyou.some(st => ['meat', 'fish'].includes(st) && rTags.includes(st)));
             }
 
-            // 同一カテゴリ内で選んだタグが「すべて」含まれているか（完全一致判定用）
             const exactZairyou = selectedZairyou.length === 0 || selectedZairyou.every(t => rTags.includes(t));
             const exactOtomo   = selectedOtomo.length === 0   || selectedOtomo.every(t => rTags.includes(t));
             const exactTyouri  = selectedTyouri.length === 0  || selectedTyouri.every(t => rTags.includes(t));
             const exactAjituke = selectedAjituke.length === 0 || selectedAjituke.every(t => rTags.includes(t));
             const exactGenre   = selectedGenre.length === 0   || selectedGenre.every(t => rTags.includes(t));
 
-            // 同一カテゴリ内で選んだタグが「いずれか1つ」含まれているか（部分一致判定用）
             const anyZairyou = selectedZairyou.length === 0 || (hasSelectedZairyou && !hasUnwantedZairyou);
             const anyOtomo   = selectedOtomo.length === 0   || selectedOtomo.some(t => rTags.includes(t));
             const anyTyouri  = selectedTyouri.length === 0  || selectedTyouri.some(t => rTags.includes(t));
             const anyAjituke = selectedAjituke.length === 0 || selectedAjituke.some(t => rTags.includes(t));
             const anyGenre   = selectedGenre.length === 0   || selectedGenre.some(t => rTags.includes(t));
 
-            // 選んだ全タグを100%満たしているか
             const isPerfectMatch = exactZairyou && exactOtomo && exactTyouri && exactAjituke && exactGenre;
 
-            // 選択された全タグのうち何個一致したか
             const matchedTags = allSelectedTags.filter(t => rTags.includes(t));
             const matchCount = matchedTags.length;
             const matchPercent = Math.round((matchCount / allSelectedTags.length) * 100);
@@ -1089,20 +1082,16 @@
             };
         });
 
-        // 1. 「🫵これがおすすめ～～！！！」：選んだ条件をすべて（100%）満たしている料理のみ
         const perfect = scoredRecipes
             .filter(item => item.isPerfectMatch && !item.hasUnwantedZairyou)
             .sort((a, b) => b.matchPercent - a.matchPercent || b.matchCount - a.matchCount)
             .map(item => ({ ...item.recipe, _matchPercent: item.matchPercent }));
 
-        // 2. 「💡 こちらはどうですか？」：
-        // 条件を2つ以上選んでいて、完全一致ではないが「主役の材料（肉など）の条件は守りつつ、他の条件に一部一致する料理」
         const suggestion = allSelectedTags.length >= 2
             ? scoredRecipes
                 .filter(item => {
                     if (item.isPerfectMatch && !item.hasUnwantedZairyou) return false;
                     if (item.matchCount === 0) return false;
-                    // 主役の材料が選ばれている場合は、別の主役材料（魚など）の料理は絶対に出さない
                     if (selectedZairyou.length > 0 && (!item.hasSelectedZairyou || item.hasUnwantedZairyou)) return false;
                     return true;
                 })
@@ -1232,7 +1221,7 @@
                 <div class="recipe-card" onclick="showCustomRecipe(${recipe.id})">
                     <img src="${recipe.image}" class="recipe-card-img" alt="${recipe.name}" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=No+Image';">
                     <div class="recipe-card-info">
-                        <span class="site-badge" style="background-color: #ffad20;">マイレシピ</span>
+                        <span class="site-badge" style="background-color: #ffad20; color: #422b08;">マイレシピ</span>
                         <h4 class="recipe-card-title">${recipe.name}の材料・作り方を見る</h4>
                         <div style="font-size: 0.8rem; color: #4b5563;">${recipe.summary || 'タップして登録済みの詳しい作り方を開く'}</div>
                     </div>
