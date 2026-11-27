@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>豆知識</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;
+    background:#faf7f2;
+    color:#2c2520;
+    min-height:100vh;
+}
+
+/* ▼ ヘッダー ▼ */
+header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px 20px;
+    background-color:#ffffff;
+    border-bottom:2px solid #efeae2;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.hamburger-wrapper{
+    position:relative;
+    z-index:200;
+}
+
+.menu-btn{
+    width:44px;
+    height:44px;
+    font-size:1.25rem;
+    border:2px solid #e6dfd5;
+    border-radius:12px;
+    background:#ffffff;
+    color:#3d332c;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:all 0.15s ease;
+}
+
+.menu-btn:hover{
+    background:#fff8eb;
+    border-color:#f59e0b;
+}
+
+/* ハンバーガーのポップアップ箱 */
+.nav-popup{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    padding-top:8px;
+    min-width:220px;
+    z-index:201;
+}
+
+.hamburger-wrapper:hover .nav-popup,
+.hamburger-wrapper.open .nav-popup{
+    display:block;
+}
+
+.nav-popup-box{
+    background-color:#ffffff;
+    border:2px solid #e6dfd5;
+    border-radius:14px;
+    box-shadow:0 10px 24px rgba(61, 51, 44, 0.12);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+
+.nav-popup-item{
+    display:block;
+    padding:14px 18px;
+    text-decoration:none;
+    color:#2c2520;
+    font-size:0.92rem;
+    font-weight:bold;
+    border-bottom:1px solid #f4efe8;
+    transition:background-color 0.15s;
+}
+
+.nav-popup-item:last-child{
+    border-bottom:none;
+}
+
+.nav-popup-item:hover{
+    background-color:#fff8eb;
+    color:#b45309;
+}
+
+h1{
+    font-size:1.35rem;
+    font-weight:800;
+    color:#2c2520;
+}
+
+/* カード */
+.container{
+    max-width:800px;
+    margin:20px auto;
+    padding:15px;
+}
+
+.tip-card{
+    background:white;
+    border:2px solid #efeae2;
+    border-left:7px solid #3f8f5c;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 4px 0 #e8e1d7;
+}
+
+.tip-card h2{
+    color:#3f8f5c;
+    margin-bottom:10px;
+    font-size:1.15rem;
+}
+
+.tip-card p{
+    line-height:1.8;
+    color:#3d332c;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <!-- 左：ハンバーガーメニュー -->
+    <div class="hamburger-wrapper" id="hamburger-wrapper">
+      <button type="button" class="menu-btn" id="hamburger-btn" aria-label="メニュー">☰</button>
+      <div class="nav-popup">
+        <div class="nav-popup-box">
+          <a href="index.html" class="nav-popup-item">ホームに戻る</a>
+          <a href="test5.html" class="nav-popup-item">アキネーターモードに行く</a>
+          <a href="recipe.html" class="nav-popup-item">レシピモードに行く</a>
+        </div>
+      </div>
+    </div>
+
+    <h1>🥬 料理の豆知識</h1>
+</header>
+
+<div class="container">
+
+    <div class="tip-card">
+        <h2>🔪 玉ねぎのみじん切り</h2>
+        <p>
+            玉ねぎは根元を残したまま切ると、
+            バラバラになりにくく、
+            きれいなみじん切りができます。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🥩 肉を柔らかくするコツ</h2>
+        <p>
+            焼く30分前に冷蔵庫から出して常温に近づけると、
+            火の通りが均一になり、柔らかく仕上がります。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🥔 じゃがいもの変色防止</h2>
+        <p>
+            切ったじゃがいもは水に5分ほどさらすことで、
+            変色を防ぎ余分なでんぷんも落とせます。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🥬 キャベツの保存方法</h2>
+        <p>
+            芯をくり抜き、湿らせたキッチンペーパーを詰めて
+            冷蔵保存すると長持ちします。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🥬 ほうれん草の保存方法</h2>
+        <p>
+            湿らせたキッチンペーパーで包み、ポリ袋に入れて根元を下にし、
+            野菜室に立てて保存すると長持ちします。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🥚 卵の鮮度チェック</h2>
+        <p>
+            水に入れて沈む卵は新鮮です。
+            浮いてくる卵は鮮度が落ちています。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🍅 トマトの糖度チェック</h2>
+        <p>
+            水に入れて沈むトマトは甘いです。
+            浮いてくるトマトは甘みが少ないです。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>🧄 にんにくの匂い対策</h2>
+        <p>
+            手についたにんにくの匂いは、
+            ステンレスに触れながら洗うと軽減できます。
+        </p>
+    </div>
+
+    <div class="tip-card">
+        <h2>料理の「さしすせそ」の順番</h2>
+        <p>
+            さ(砂糖)し(塩)す(酢)せ(醤油)そ(味噌)の順に入れると
+            料理の味がなじみやすくなる。
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // ハンバーガーメニュー開閉
+    const hamburgerWrapper = document.getElementById('hamburger-wrapper');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hamburgerWrapper.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!hamburgerWrapper.contains(e.target)) {
+        hamburgerWrapper.classList.remove('open');
+      }
+    });
+</script>
+
+</body>
+</html>
